@@ -9,6 +9,7 @@ __pycache__/
 # venv
 base
 *.csv
+.vscode/
 
 # Distribution / packaging
 .Python
