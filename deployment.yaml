@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: capstone-mlops
+  labels:
+    app: capstone-mlops
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: capstone-mlops
+  template:
+    metadata:
+      labels:
+        app: capstone-mlops
+    spec:
+      containers:
+      - name: capstone-mlops
+        image: 761018852587.dkr.ecr.us-east-1.amazonaws.com/capstonemlops:latest
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
+        envFrom:
+        - secretRef:
+            name: capstone-secret   # loads all keys as env vars
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: capstone-mlops-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: capstone-mlops
+  ports:
+    - name: http
+      protocol: TCP
+      port: 5000
+      targetPort: 5000
